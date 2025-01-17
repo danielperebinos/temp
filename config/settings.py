@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from django.conf.urls.static import static
+from django.templatetags.static import static
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
@@ -10,7 +10,7 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "django-insecure-oy&tj$=xnwnv+c7bcx9fije17j0wvdy8n6k5-!3jzcc)-t=pen"
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 DEBUG = True
 
@@ -115,7 +115,7 @@ UNFOLD = {
     "ENVIRONMENT": "apps.common.views.environment_callback",
     # "DASHBOARD_CALLBACK": "apps.common.views.dashboard_callback",
     "LOGIN": {
-        "image": lambda request: static("images/login.jpg"),
+        "image": lambda request: static("images/login2.jpg"),
         "redirect_after": lambda request: reverse_lazy("admin:index"),
     },
     "COLORS": {
