@@ -1,0 +1,64 @@
+[project]
+name = "vetmap"
+version = "0.1.0"
+description = "Description will be added later"
+authors = [
+    { name = "daniel.perebinos", email = "daniel.perebinos@ebs-integrator.com" }
+]
+readme = "README.md"
+requires-python = ">=3.11"
+
+dependencies = [
+    "django (>=5.1.5,<6.0.0)",
+    "djangorestframework (>=3.15.2,<4.0.0)",
+    "django-unfold (>=0.44.0,<0.45.0)",
+    "python-dotenv (>=1.0.1,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+target-version = "py311"
+exclude = [
+    "*/migrations/*"
+]
+
+lint.select = [
+    "E", # pycodestyle
+    "F", # Pyflakes
+    "I", # isort
+    "B", # flake8-bugbear
+    "ASYNC", # flake8-async
+    "T10", # flake8-debugger
+    "ISC", # flake8-implicit-str-concat
+    "ICN", # flake8-import-conventions
+    "PIE", # flake8-pie
+    "BLE", # flake8-blind-except
+    "SIM", # flake8-simplify
+    "PTH", # flake8-use-pathlib
+    "FIX", # flake8 - fix me
+    "N", # pep8-naming
+    "UP", # pyupgrade
+]
+lint.ignore = [
+    "ISC001", # Disabled to avoid unexpected behaviour on `ruff format .`
+    "E501",
+    "BLE001",
+    "FIX002" # Temporar
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.9.2"
+pre-commit = "^4.0.1"
+
