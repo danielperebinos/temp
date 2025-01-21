@@ -2,6 +2,7 @@ services:
   vet-api:
     build: .
     image: vet-django
+    hostname: vet_django
     ports:
       - "8000:8000"
       - "441:441"
@@ -9,8 +10,6 @@ services:
       - .env
     environment:
       - POSTGRES_HOST=vet_postgres
-    depends_on:
-      - vet-postgres
 
   vet-postgres:
     hostname: vet_postgres
@@ -24,16 +23,15 @@ services:
       - POSTGRES_PASSWORD=pass
       - POSTGRES_DB=vet
 
-  vet-nginx-manager:
-    image: 'jc21/nginx-proxy-manager:2.11.3'
-    restart: unless-stopped
+  vet-nginx:
+    image: nginx:1.27.3-alpine
     ports:
-      - '80:80'
-      - '443:443'
-      - '81:81'
+      - "80:80"
     volumes:
-      - ./data:/data
-      - ./letsencrypt:/etc/letsencrypt
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./static:/usr/app/static
+    depends_on:
+      - vet-api
 
 volumes:
   vet_postgres_data:

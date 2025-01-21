@@ -30,15 +30,15 @@ class Institution(BaseModel):
 
     # Coords
     longitude = models.DecimalField(
-        max_digits=9,
-        decimal_places=6,
+        max_digits=13,
+        decimal_places=10,
         blank=True,
         null=True,
         help_text="The longitude coordinate of the institution's location.",
     )
     latitude = models.DecimalField(
-        max_digits=9,
-        decimal_places=6,
+        max_digits=13,
+        decimal_places=10,
         blank=True,
         null=True,
         help_text="The latitude coordinate of the institution's location.",
@@ -70,3 +70,7 @@ class Institution(BaseModel):
 
     def __str__(self):
         return f"{self.name} [{self.physical_address}]"
+
+    @property
+    def coordinates(self):
+        return self.latitude, self.longitude

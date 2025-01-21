@@ -15,7 +15,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     "unfold",
@@ -126,7 +126,7 @@ UNFOLD = {
     "SHOW_VIEW_ON_SITE": False,
     "ENVIRONMENT": "apps.common.views.environment_callback",
     "LOGIN": {
-        "image": lambda request: static("images/login2.jpg"),
+        "image": lambda request: static("images/login.jpg"),
         "redirect_after": lambda request: reverse_lazy("admin:index"),
     },
     "COLORS": {

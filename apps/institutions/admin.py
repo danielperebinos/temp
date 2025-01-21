@@ -8,7 +8,6 @@ from apps.institutions.models import Institution
 from apps.institutions.resources import InstitutionResource
 
 
-
 @admin.register(Institution)
 class InstitutionAdmin(ModelAdmin, ImportExportModelAdmin):
     resource_class = InstitutionResource
@@ -25,9 +24,12 @@ class InstitutionAdmin(ModelAdmin, ImportExportModelAdmin):
     )
 
     list_filter = (
-        "type", "founding_authority", "created_by", "updated_by",
+        "type",
+        "founding_authority",
+        "created_by",
+        "updated_by",
         ("created_at", RangeDateFilter),
-        ("updated_at", RangeDateFilter)
+        ("updated_at", RangeDateFilter),
     )
     search_fields = ("name", "description", "summary")
     search_help_text = "Search by name, description and summary occurencies"
