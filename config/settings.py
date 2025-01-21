@@ -5,12 +5,13 @@ from django.templatetags.static import static
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
+from import_export.formats.base_formats import CSV, XLSX
 
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 DEBUG = True
 
@@ -18,12 +19,14 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "unfold",
+    "unfold.contrib.import_export",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "import_export",
     "apps.common",
     "apps.institutions",
 ]
@@ -92,6 +95,8 @@ STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+IMPORT_FORMATS = [CSV, XLSX]
 
 ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
 

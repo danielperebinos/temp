@@ -1,5 +1,5 @@
-from decimal import Decimal
 
+from django.contrib.auth.models import User
 from django.db import models
 
 from apps.common.models import BaseModel
@@ -8,14 +8,9 @@ from apps.common.models import BaseModel
 class Institution(BaseModel):
     # Base info
     name = models.CharField(max_length=255, help_text="The official name of the institution.")
-    fields_of_professional_training = models.JSONField(
-        default=dict, help_text="A JSON object listing the fields of professional training offered by the institution."
-    )
+    type = models.CharField(max_length=255, help_text="The type of the institution.")
     founding_authority = models.CharField(
-        max_length=255, help_text="The authority or organization that founded the institution."
-    )
-    specialization = models.CharField(
-        max_length=255, help_text="The main area of specialization or focus of the institution."
+        max_length=255, blank=True, default="", help_text="The authority or organization that founded the institution."
     )
     physical_address = models.CharField(
         max_length=255, help_text="The physical address of the institution, including street, city, and postal code."
@@ -26,8 +21,12 @@ class Institution(BaseModel):
         max_length=255, blank=True, null=True, help_text="The official contact email address of the institution."
     )
     website = models.URLField(blank=True, null=True, help_text="The official website URL of the institution.")
-    phone = models.CharField(
-        max_length=255, blank=True, null=True, help_text="The contact phone number of the institution."
+    phone = models.CharField(max_length=255, help_text="The contact phone number of the institution.")
+    summary = models.TextField(help_text="A brief summary of the institution's key details.")
+    description = models.TextField(
+        blank=True,
+        default="",
+        help_text="Optional rich text providing detailed information about the institution, such as specialties and study duration.",
     )
 
     # Coords
@@ -46,6 +45,24 @@ class Institution(BaseModel):
         help_text="The latitude coordinate of the institution's location.",
     )
 
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="institutions_created",
+        help_text="The user who created the institution.",
+    )
+
+    updated_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="institutions_updated",
+        help_text="The user who updated the institution.",
+    )
+
     class Meta:
         verbose_name = "Institution"
         verbose_name_plural = "Institutions"
@@ -54,7 +71,3 @@ class Institution(BaseModel):
 
     def __str__(self):
         return f"{self.name} [{self.physical_address}]"
-
-    def get_coordinates(self) -> tuple[Decimal, Decimal]:
-        if self.latitude and self.longitude:
-            return self.latitude, self.longitude
