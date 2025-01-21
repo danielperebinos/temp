@@ -19,6 +19,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "unfold",
+    "unfold.contrib.filters",
     "unfold.contrib.import_export",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -26,6 +27,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "drf_spectacular",
     "import_export",
     "apps.common",
     "apps.institutions",
@@ -63,8 +66,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.environ.get("POSTGRES_NAME"),
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "HOST": os.environ.get("POSTGRES_HOST"),
+        "PORT": os.environ.get("POSTGRES_PORT"),
     }
 }
 
@@ -116,9 +123,8 @@ UNFOLD = {
         },
     ],
     "SHOW_HISTORY": True,
-    "SHOW_VIEW_ON_SITE": True,
+    "SHOW_VIEW_ON_SITE": False,
     "ENVIRONMENT": "apps.common.views.environment_callback",
-    # "DASHBOARD_CALLBACK": "apps.common.views.dashboard_callback",
     "LOGIN": {
         "image": lambda request: static("images/login2.jpg"),
         "redirect_after": lambda request: reverse_lazy("admin:index"),
@@ -152,7 +158,6 @@ UNFOLD = {
             {
                 "title": _("Administrator"),
                 "separator": True,
-                "collapsible": True,
                 "items": [
                     {
                         "title": _("Users & Groups"),
@@ -195,4 +200,40 @@ UNFOLD = {
             ],
         }
     ],
+}
+
+REST_FRAMEWORK = {
+    "DATETIME_FORMAT": "%Y-%m-%dT%H:%M:%SZ",
+    "PAGE_SIZE": 50,
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Vet Map API",
+    "DESCRIPTION": "Schema for API",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": True,
+}
+
+LOGGING_LEVEL = os.environ.get("LOGGING_LEVEL", "INFO")
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "standard": {"format": "%(asctime)s [%(levelname)s]- %(message)s"},
+    },
+    "handlers": {
+        "console": {
+            "level": LOGGING_LEVEL,
+            "class": "logging.StreamHandler",
+            "formatter": "standard",
+        },
+    },
+    "loggers": {
+        "info": {"handlers": ["console"], "level": LOGGING_LEVEL, "propagate": True},
+        "django": {"handlers": ["console"], "level": LOGGING_LEVEL, "propagate": True},
+    },
 }

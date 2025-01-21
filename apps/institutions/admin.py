@@ -1,10 +1,12 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from unfold.admin import ModelAdmin
+from unfold.contrib.filters.admin import RangeDateFilter
 from unfold.contrib.import_export.forms import ExportForm, ImportForm
 
 from apps.institutions.models import Institution
 from apps.institutions.resources import InstitutionResource
+
 
 
 @admin.register(Institution)
@@ -22,6 +24,13 @@ class InstitutionAdmin(ModelAdmin, ImportExportModelAdmin):
         ("Track", {"fields": ("created_by", "created_at", "updated_by", "updated_at")}),
     )
 
+    list_filter = (
+        "type", "founding_authority", "created_by", "updated_by",
+        ("created_at", RangeDateFilter),
+        ("updated_at", RangeDateFilter)
+    )
+    search_fields = ("name", "description", "summary")
+    search_help_text = "Search by name, description and summary occurencies"
     readonly_fields = ("created_by", "created_at", "updated_by", "updated_at")
 
     def get_resource_kwargs(self, request, *args, **kwargs):
