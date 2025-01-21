@@ -33,7 +33,16 @@ def parse_coordinate(coordinate: str) -> float:
 
 class CoordinateWidget(Widget):
     def clean(self, value, row=None, *args, **kwargs):
+        if value is None:
+            raise ValueError("Value cannot be empty.")
         return parse_coordinate(str(value))
+
+
+class RequiredFieldWidget(Widget):
+    def clean(self, value, row=None, *args, **kwargs):
+        if value in [None, ""]:
+            raise ValueError("Value cannot be empty.")
+        return value
 
 
 class InstitutionResource(ModelResource):
@@ -41,16 +50,20 @@ class InstitutionResource(ModelResource):
         super().__init__(*args, **kwargs)
         self.user = kwargs.get("user")
 
-    name = fields.Field(column_name="Instituția de învățământ profesional tehnic", attribute="name")
-    type = fields.Field(column_name="Tipul institutiei", attribute="type")
+    name = fields.Field(
+        column_name="Instituția de învățământ profesional tehnic", attribute="name", widget=RequiredFieldWidget()
+    )
+    type = fields.Field(column_name="Tipul institutiei", attribute="type", widget=RequiredFieldWidget())
     founding_authority = fields.Field(column_name="Fondator", attribute="founding_authority")
     physical_address = fields.Field(
-        column_name="Adresa juridică, inclusiv pentru sediile arondate", attribute="physical_address"
+        column_name="Adresa juridică, inclusiv pentru sediile arondate",
+        attribute="physical_address",
+        widget=RequiredFieldWidget(),
     )
     email = fields.Field(column_name="E-email", attribute="email")
     website = fields.Field(column_name="Pagina web", attribute="website")
-    phone = fields.Field(column_name="Telefon director / anticameră", attribute="phone")
-    summary = fields.Field(column_name="Inst summary", attribute="summary")
+    phone = fields.Field(column_name="Telefon director / anticameră", attribute="phone", widget=RequiredFieldWidget())
+    summary = fields.Field(column_name="Inst summary", attribute="summary", widget=RequiredFieldWidget())
     description = fields.Field(column_name="Description", attribute="description", widget=CharWidget())
     latitude = fields.Field(column_name="Latitudine", attribute="latitude", widget=CoordinateWidget())
     longitude = fields.Field(column_name="Longitudine", attribute="longitude", widget=CoordinateWidget())
