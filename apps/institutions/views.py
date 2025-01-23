@@ -5,7 +5,7 @@ from apps.institutions.models import Institution
 from apps.institutions.serializers import InstitutionSerializer
 
 
-class InstitutionViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet):
+class InstitutionViewSet(ListModelMixin, GenericViewSet):
     queryset = Institution.objects.all()
     serializer_class = InstitutionSerializer
     pagination_class = None
