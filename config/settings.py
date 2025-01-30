@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -164,7 +164,7 @@ UNFOLD = {
                 "separator": True,
                 "items": [
                     {
-                        "title": _("Users & Groups"),
+                        "title": _("Users"),
                         "icon": "people",
                         "permission": lambda request: request.user.is_superuser,
                         "link": reverse_lazy("admin:auth_user_changelist"),
@@ -188,17 +188,11 @@ UNFOLD = {
         {
             "models": [
                 "auth.user",
-                "auth.group",
             ],
             "items": [
                 {
                     "title": _("Users"),
                     "link": reverse_lazy("admin:auth_user_changelist"),
-                    "permission": lambda request: request.user.is_superuser,
-                },
-                {
-                    "title": _("Groups"),
-                    "link": reverse_lazy("admin:auth_group_changelist"),
                     "permission": lambda request: request.user.is_superuser,
                 },
             ],
