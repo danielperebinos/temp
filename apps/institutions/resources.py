@@ -4,7 +4,7 @@ from import_export import fields
 from import_export.resources import ModelResource
 from import_export.widgets import CharWidget, Widget
 
-from apps.institutions.models import Institution
+from apps.institutions.models import Institution, InstitutionType
 
 
 def parse_coordinate(coordinate: str) -> float:
@@ -45,6 +45,22 @@ class RequiredFieldWidget(Widget):
         return value
 
 
+class RequiredTextChoicesWidget(RequiredFieldWidget):
+    def __init__(self, choices_model, coerce_to_string=True):
+        super().__init__(coerce_to_string)
+        self.choices_model = choices_model
+
+    def clean(self, value, row=None, *args, **kwargs):
+        value = value.strip()
+        super().clean(value, row=row, *args, **kwargs)
+
+        if value not in [choice[0] for choice in self.choices_model.choices]:
+            raise ValueError(
+                f"Value should be one of the following: {', '.join([choice[0] for choice in InstitutionType.choices])}."
+            )
+        return value
+
+
 class InstitutionResource(ModelResource):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -53,7 +69,11 @@ class InstitutionResource(ModelResource):
     name = fields.Field(
         column_name="Instituția de învățământ profesional tehnic", attribute="name", widget=RequiredFieldWidget()
     )
-    type = fields.Field(column_name="Tipul institutiei", attribute="type", widget=RequiredFieldWidget())
+    type = fields.Field(
+        column_name="Tipul institutiei",
+        attribute="type",
+        widget=RequiredTextChoicesWidget(choices_model=InstitutionType),
+    )
     founding_authority = fields.Field(column_name="Fondator", attribute="founding_authority")
     physical_address = fields.Field(
         column_name="Adresa juridică, inclusiv pentru sediile arondate",

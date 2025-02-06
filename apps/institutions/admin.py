@@ -13,8 +13,10 @@ class InstitutionAdmin(ModelAdmin, ImportExportModelAdmin):
     resource_class = InstitutionResource
     import_form_class = ImportForm
     export_form_class = ExportForm
+    list_per_page = 20
 
-    list_display = ("id", "name", "founding_authority", "physical_address")
+    list_display = ("name", "type", "founding_authority", "physical_address")
+    list_display_links = ("name", "type", "founding_authority", "physical_address")
     fieldsets = (
         ("General", {"fields": ("name", "founding_authority", "type", "physical_address")}),
         ("Summary", {"fields": ("summary", "description")}),

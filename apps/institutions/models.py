@@ -4,10 +4,16 @@ from django.db import models
 from apps.common.models import BaseModel
 
 
+class InstitutionType(models.TextChoices):
+    CENTRUL_DE_EXCELENTA = "Centrul de Excelenţă", "Centrul de Excelenţă"
+    COLEGIUL = "Colegiul", "Colegiul"
+    SCOALA_PROFESIONALA = "Școala Profesională", "Școala Profesională"
+
+
 class Institution(BaseModel):
     # Base info
     name = models.CharField(max_length=255, help_text="The official name of the institution.")
-    type = models.CharField(max_length=255, help_text="The type of the institution.")
+    type = models.CharField(max_length=255, choices=InstitutionType.choices, help_text="The type of the institution.")
     founding_authority = models.CharField(
         max_length=255, blank=True, default="", help_text="The authority or organization that founded the institution."
     )
