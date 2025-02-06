@@ -15,29 +15,58 @@ class InstitutionType(models.TextChoices):
 
 class Institution(BaseModel):
     # Base info
-    name = models.CharField(max_length=255, help_text="The official name of the institution.")
-    type = models.CharField(max_length=255, choices=InstitutionType.choices, help_text="The type of the institution.")
+    name = models.CharField(
+        max_length=255,
+        verbose_name="Instituția de învățământ profesional tehnic",
+        help_text="The official name of the institution."
+    )
+    type = models.CharField(
+        max_length=255,
+        choices=InstitutionType.choices,
+        verbose_name="Tipul institutiei",
+        help_text="The type of the institution."
+    )
     founding_authority = models.CharField(
-        max_length=255, blank=True, default="", help_text="The authority or organization that founded the institution."
+        max_length=255,
+        blank=True,
+        default="",
+        verbose_name="Fondator",
+        help_text="The authority or organization that founded the institution."
     )
     physical_address = models.CharField(
-        max_length=255, help_text="The physical address of the institution, including street, city, and postal code."
+        max_length=255,
+        verbose_name="Adresa juridică, inclusiv pentru sediile arondate",
+        help_text="The physical address of the institution, including street, city, and postal code."
     )
 
     # Contacts
     email = models.EmailField(
-        max_length=255, blank=True, null=True, help_text="The official contact email address of the institution."
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name="E-email",
+        help_text="The official contact email address of the institution."
     )
-    website = models.URLField(blank=True, null=True, help_text="The official website URL of the institution.")
+    website = models.URLField(
+        blank=True,
+        null=True,
+        verbose_name="Pagina web",
+        help_text="The official website URL of the institution."
+    )
     phone = models.CharField(
         max_length=255,
         validators=[RegexValidator(r"^([\d\s\W]+)(,\s[\d\s\W]+)*$")],
+        verbose_name="Telefon director / anticameră",
         help_text="The contact phone number of the institution."
     )
-    summary = models.TextField(help_text="A brief summary of the institution's key details.")
+    summary = models.TextField(
+        verbose_name="Inst summary",
+        help_text="A brief summary of the institution's key details."
+    )
     description = models.TextField(
         blank=True,
         default="",
+        verbose_name="Description",
         help_text="Optional rich text providing detailed information about the institution, such as specialties and study duration.",
     )
 
@@ -48,6 +77,7 @@ class Institution(BaseModel):
         blank=True,
         null=True,
         validators=[MinValueValidator(Decimal(-180)), MaxValueValidator(Decimal(180))],
+        verbose_name="Longitudine",
         help_text="The longitude coordinate of the institution's location.",
     )
     latitude = models.DecimalField(
@@ -56,6 +86,7 @@ class Institution(BaseModel):
         blank=True,
         null=True,
         validators=[MinValueValidator(Decimal(-90)), MaxValueValidator(Decimal(90))],
+        verbose_name="Latitudine",
         help_text="The latitude coordinate of the institution's location.",
     )
 
@@ -65,6 +96,7 @@ class Institution(BaseModel):
         null=True,
         blank=True,
         related_name="institutions_created",
+        verbose_name="Creat de",
         help_text="The user who created the institution.",
     )
 
@@ -74,6 +106,7 @@ class Institution(BaseModel):
         null=True,
         blank=True,
         related_name="institutions_updated",
+        verbose_name="Actualizat de",
         help_text="The user who updated the institution.",
     )
 
@@ -84,7 +117,7 @@ class Institution(BaseModel):
         constraints = [models.UniqueConstraint(fields=["name", "physical_address"], name="unique_institution_address")]
 
     def __str__(self):
-        return f"{self.name} [{self.physical_address}]"
+        return self.name
 
     @property
     def coordinates(self):
