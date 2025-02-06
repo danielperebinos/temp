@@ -32,10 +32,27 @@ def parse_coordinate(coordinate: str) -> float:
 
 
 class CoordinateWidget(Widget):
+    def __init__(self, coerce_to_string=True, latitude: bool = False, longitude: bool = False):
+        super().__init__(coerce_to_string)
+        self.max = self.min = None
+
+        if latitude:
+            self.min = -90
+            self.max = 90
+        elif longitude:
+            self.min = -180
+            self.max = 180
+
     def clean(self, value, row=None, *args, **kwargs):
         if value is None:
             raise ValueError("Value cannot be empty.")
-        return parse_coordinate(str(value))
+
+        value = parse_coordinate(str(value))
+        if self.min and value < self.min:
+            raise ValueError(f"Value cannot be less than {self.min}.")
+        if self.max and value > self.max:
+            raise ValueError(f"Value cannot be greater than {self.max}.")
+        return value
 
 
 class RequiredFieldWidget(Widget):
@@ -94,8 +111,8 @@ class InstitutionResource(ModelResource):
     phone = fields.Field(column_name="Telefon director / anticameră", attribute="phone", widget=PhoneWidget())
     summary = fields.Field(column_name="Inst summary", attribute="summary", widget=RequiredFieldWidget())
     description = fields.Field(column_name="Description", attribute="description", widget=CharWidget())
-    latitude = fields.Field(column_name="Latitudine", attribute="latitude", widget=CoordinateWidget())
-    longitude = fields.Field(column_name="Longitudine", attribute="longitude", widget=CoordinateWidget())
+    latitude = fields.Field(column_name="Latitudine", attribute="latitude", widget=CoordinateWidget(latitude=True))
+    longitude = fields.Field(column_name="Longitudine", attribute="longitude", widget=CoordinateWidget(longitude=True))
 
     class Meta:
         model = Institution

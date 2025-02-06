@@ -1,5 +1,7 @@
+from decimal import Decimal
+
 from django.contrib.auth.models import User
-from django.core.validators import RegexValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
 
 from apps.common.models import BaseModel
@@ -45,6 +47,7 @@ class Institution(BaseModel):
         decimal_places=10,
         blank=True,
         null=True,
+        validators=[MinValueValidator(Decimal(-180)), MaxValueValidator(Decimal(180))],
         help_text="The longitude coordinate of the institution's location.",
     )
     latitude = models.DecimalField(
@@ -52,6 +55,7 @@ class Institution(BaseModel):
         decimal_places=10,
         blank=True,
         null=True,
+        validators=[MinValueValidator(Decimal(-90)), MaxValueValidator(Decimal(90))],
         help_text="The latitude coordinate of the institution's location.",
     )
 
