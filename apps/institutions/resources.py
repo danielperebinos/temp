@@ -61,6 +61,15 @@ class RequiredTextChoicesWidget(RequiredFieldWidget):
         return value
 
 
+class PhoneWidget(RequiredFieldWidget):
+    def clean(self, value, row=None, *args, **kwargs):
+        super().clean(value, row, *args, **kwargs)
+        value = value.strip(" ,")
+        if not re.match(r"^([\d\s\W]+)(,\s[\d\s\W]+)*$", value):
+            raise ValueError("Invalid phone format.")
+        return value
+
+
 class InstitutionResource(ModelResource):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -82,7 +91,7 @@ class InstitutionResource(ModelResource):
     )
     email = fields.Field(column_name="E-email", attribute="email")
     website = fields.Field(column_name="Pagina web", attribute="website")
-    phone = fields.Field(column_name="Telefon director / anticameră", attribute="phone", widget=RequiredFieldWidget())
+    phone = fields.Field(column_name="Telefon director / anticameră", attribute="phone", widget=PhoneWidget())
     summary = fields.Field(column_name="Inst summary", attribute="summary", widget=RequiredFieldWidget())
     description = fields.Field(column_name="Description", attribute="description", widget=CharWidget())
     latitude = fields.Field(column_name="Latitudine", attribute="latitude", widget=CoordinateWidget())

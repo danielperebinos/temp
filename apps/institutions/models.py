@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 from django.db import models
 
 from apps.common.models import BaseModel
@@ -26,7 +27,11 @@ class Institution(BaseModel):
         max_length=255, blank=True, null=True, help_text="The official contact email address of the institution."
     )
     website = models.URLField(blank=True, null=True, help_text="The official website URL of the institution.")
-    phone = models.CharField(max_length=255, help_text="The contact phone number of the institution.")
+    phone = models.CharField(
+        max_length=255,
+        validators=[RegexValidator(r"^([\d\s\W]+)(,\s[\d\s\W]+)*$")],
+        help_text="The contact phone number of the institution."
+    )
     summary = models.TextField(help_text="A brief summary of the institution's key details.")
     description = models.TextField(
         blank=True,
