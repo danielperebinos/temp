@@ -133,7 +133,7 @@ be deployed in the following sequence:
 1. **PostgreSQL**
     - Start the PostgreSQL database first.
     - Ensure the necessary environment variables for database connection are set in the `.env` file (
-      e.g., `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, etc.).
+      e.g., `POSTGRES_NAME`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, etc.).
 
 2. **Django Application**
     - After PostgreSQL is running, deploy the Django application.
