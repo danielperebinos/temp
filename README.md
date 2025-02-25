@@ -125,7 +125,7 @@ For additional branches, the following naming conventions are used:
 
 ---
 
-### **Deployment Order and Configuration**
+## **Deployment Order and Configuration**
 
 Deploying the project requires following a specific order to ensure all components function correctly. The services must
 be deployed in the following sequence:
@@ -148,7 +148,7 @@ be deployed in the following sequence:
 
 ---
 
-### **System Requirements**
+## **System Requirements**
 
 To ensure smooth deployment, the virtual machine should meet the following minimum requirements:
 
