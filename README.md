@@ -137,7 +137,7 @@ be deployed in the following sequence:
 
 2. **Django Application**
     - After PostgreSQL is running, deploy the Django application.
-    - Django will use the database credentials from the `.env` file to connect to PostgreSQL.
+    - Django will use the database credentials from the `.env` file or in environment to connect to PostgreSQL.
     - Run database migrations and collect static files before starting the application.
 
 3. **Nginx**
