@@ -4,7 +4,8 @@
 
 The purpose of this project is to:
 
-- **Efficiently manage institution data**: Import, store, and retrieve institution details via Django Admin and provide API endpoints for accessing this data.
+- **Efficiently manage institution data**: Import, store, and retrieve institution details via Django Admin and provide
+  API endpoints for accessing this data.
 - **Streamline data management**: Allow for seamless import from Excel and editing of institution information.
 - **Provide API access**: Expose institution data through DRF APIs for list and retrieve operations.
 
@@ -61,7 +62,28 @@ If you prefer running the project without Docker:
 
 ## Environment Variables
 
-The following environment variables need to be configured for the project to work correctly:
+To ensure proper functionality, the project requires specific environment variables to be set. These variables should be
+defined in a `.env` file and loaded into the application at runtime.
+
+#### **General Configuration**
+
+- **`ENVIRONMENT`**: Defines the environment in which the application runs. Common values are `development`, `staging`,
+  or `production`.
+- **`SECRET_KEY`**: A secret key used for cryptographic signing in Django. This should be a long, random, and unique
+  string.
+
+#### **Database Configuration (PostgreSQL)**
+
+These variables define the connection settings for the PostgreSQL database:
+
+- **`POSTGRES_NAME`**: The name of the database used by Django.
+- **`POSTGRES_USER`**: The username for connecting to the database.
+- **`POSTGRES_PASSWORD`**: The password associated with the database user.
+- **`POSTGRES_HOST`**: The hostname or IP address where PostgreSQL is running. If using Docker, this is typically the
+  name of the database service (e.g., `postgres`).
+- **`POSTGRES_PORT`**: The port number on which PostgreSQL is running (default is `5432`).
+
+Ensure that these variables are correctly set before starting the application to prevent connection issues.
 
 ```env
 ENVIRONMENT=development
@@ -103,18 +125,37 @@ For additional branches, the following naming conventions are used:
 
 ---
 
-## Services to Deploy and How
+### **Deployment Order and Configuration**
 
-The project includes the following services:
+Deploying the project requires following a specific order to ensure all components function correctly. The services must
+be deployed in the following sequence:
 
-- **Django Application**: Manages the backend logic and API endpoints.
-- **PostgreSQL**: Stores all project data.
-- **Nginx**: Serves static files and acts as a reverse proxy for the Django application.
+1. **PostgreSQL**
+    - Start the PostgreSQL database first.
+    - Ensure the necessary environment variables for database connection are set in the `.env` file (
+      e.g., `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, etc.).
 
-For deploying these services:
+2. **Django Application**
+    - After PostgreSQL is running, deploy the Django application.
+    - Django will use the database credentials from the `.env` file to connect to PostgreSQL.
+    - Run database migrations and collect static files before starting the application.
 
-- Use Docker Compose to manage and deploy services.
-- Ensure environment variables are correctly configured in your `.env` file.
+3. **Nginx**
+    - There is no need to deploy a separate Nginx instance.
+    - The configuration must reference the `nginx.conf` file, which handles:
+        - Serving static files.
+        - Forwarding all other requests to the Django application.
 
-Refer to the `compose.yaml` file for further details on how services are orchestrated.
+---
 
+### **System Requirements**
+
+To ensure smooth deployment, the virtual machine should meet the following minimum requirements:
+
+- **Operating System**: Linux (Ubuntu 20.04+ recommended)
+- **CPU**: At least 2 vCPUs
+- **RAM**: Minimum 4GB
+- **Disk Space**: At least 20GB of available storage
+- **Docker**: Installed and properly configured
+
+Refer to the `compose.yaml` file for additional service orchestration details.
