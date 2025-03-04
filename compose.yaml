@@ -10,10 +10,12 @@ services:
       - .env
     volumes:
       - vet_static_volume:/usr/app/static/
+    environment:
+      - POSTGRES_HOST=vet_postgres
 
   vet-postgres:
     hostname: vet_postgres
-    image: postgres:17
+    image: postgres:17-bullseye
     ports:
       - "5432:5432"
     volumes:
