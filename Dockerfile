@@ -1,7 +1,6 @@
 FROM python:3.11-slim-bullseye
 
 RUN apt-get update && \
-    apt-get install -y ffmpeg && \
     apt-get clean autoclean && \
     apt-get autoremove --purge -y && \
     rm -rf /var/lib/apt/lists/* && \

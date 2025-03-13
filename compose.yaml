@@ -32,6 +32,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - vet_static_volume:/usr/app/static
+      - ./static/map-widget.js:/usr/app/static/map-widget.js
     depends_on:
       - vet-api
 
