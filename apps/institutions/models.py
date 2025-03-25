@@ -44,7 +44,7 @@ class Institution(BaseModel):
         max_length=255,
         blank=True,
         null=True,
-        verbose_name="E-email",
+        verbose_name="Email",
         help_text="The official contact email address of the institution."
     )
     website = models.URLField(

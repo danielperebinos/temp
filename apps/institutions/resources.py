@@ -106,7 +106,7 @@ class InstitutionResource(ModelResource):
         attribute="physical_address",
         widget=RequiredFieldWidget(),
     )
-    email = fields.Field(column_name="E-email", attribute="email")
+    email = fields.Field(column_name="Email", attribute="email")
     website = fields.Field(column_name="Pagina web", attribute="website")
     phone = fields.Field(column_name="Telefon director / anticameră", attribute="phone", widget=PhoneWidget())
     summary = fields.Field(column_name="Inst summary", attribute="summary", widget=RequiredFieldWidget())

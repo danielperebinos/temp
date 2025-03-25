@@ -13,7 +13,7 @@ RUN mkdir -p /usr/app
 
 WORKDIR /usr/app
 
-RUN pip install gunicorn poetry
+RUN pip install poetry
 
 COPY poetry.lock pyproject.toml /usr/app/
 
